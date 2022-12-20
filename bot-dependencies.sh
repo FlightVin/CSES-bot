@@ -10,4 +10,7 @@ alias python=python3
 pip install selenium
 
 # setting up drivers
-python bot-modules/driver_installation.py 
+python bot_modules/driver_installation.py 
+
+# taking in username and password
+python bot_modules/save_key.py 
