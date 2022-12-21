@@ -6,7 +6,11 @@ A program that allows you to submit codes on cses through google chrome from you
 
 Set up dependencies and password by running the bash script `bot-dependencies.sh`
 
+This will also ask for the path to a program that the user wihses to use repeatedly for submissions(Can be left as blank string)
+
 `$ bash bot-dependencies.sh`
+
+This can be run again to reset passwords and code location.
 
 ## Running
 
@@ -29,7 +33,9 @@ Run the main python script by -
 
     - Opens the task's page on chrome
     - lists tasks name on terminal
+    - lists task section 
 
 ### Submitting code - 
 
-`$ submit <task number> <location of code>`
+If providing absolute path - `$ submit <task number> <location of code>`
+If using preset path - `$ submit <task number> -p`

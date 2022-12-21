@@ -9,6 +9,7 @@ from sys import stdout
 CSES_BASE_URL = 'https://cses.fi/'
 CSES_LOGIN_URL = CSES_BASE_URL + 'login/'
 CSES_TASK_URL = CSES_BASE_URL + 'problemset/task/'
+CSES_SUBMIT_URL = CSES_BASE_URL + 'problemset/submit/'
 
 class webpage(webdriver.Chrome):
     # for login
@@ -50,9 +51,9 @@ class webpage(webdriver.Chrome):
 
         try: 
             task_name_element = self.find_element(by=By.TAG_NAME, value='h1')
-            print("\t Task Name: " + task_name_element.text)
-            stdout.flush()
             task_section_element = self.find_element(by=By.TAG_NAME, value='h4')
+            
+            print("\t Task Name: " + task_name_element.text)
             print("\t Task Section: " + task_section_element.text)
             stdout.flush()
         except selenium.common.exceptions.NoSuchElementException:
@@ -62,7 +63,25 @@ class webpage(webdriver.Chrome):
 
     # Submitting code on cses
     def code_submit(self, cmd = None) -> None:
-        pass
+        task_number = cmd[1]
+        self.get(CSES_SUBMIT_URL + task_number)
+
+        try:
+            file_element = self.find_element(by='xpath', value="//input[@name='file']")
+            submit_element = self.find_element(by='xpath', value="//input[@value='Submit']")
+
+            if cmd[2] == '-p':
+                file_element.send_keys(self.preset_code_path)
+            else :
+                file_element.send_keys(cmd[2])
+            submit_element.click()
+        except selenium.common.exceptions.NoSuchElementException:
+            print("No such task exists!")
+            stdout.flush()
+            self.back()
+        except selenium.common.exceptions.InvalidArgumentException as e:
+            print("File not found")
+            stdout.flush()
 
 
     # initialzing the webpage object
