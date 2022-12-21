@@ -6,7 +6,7 @@ A program that allows you to submit codes on cses through google chrome from you
 
 Set up dependencies and password by running the bash script `bot-dependencies.sh`
 
-This will also ask for the path to a program that the user wihses to use repeatedly for submissions (Can be left as blank string)
+This will also ask for the path to a program that the user wishes to use repeatedly for submissions (Can be left as blank string)
 
 `$ bash bot-dependencies.sh`
 
