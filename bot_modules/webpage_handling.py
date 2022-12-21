@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 import bot_modules.cses_commands as cses
 from bot_modules.cses_commands import BASE_COMMANDS
 from sys import stdout
-
+from os.path import isfile
 
 CSES_BASE_URL = 'https://cses.fi/'
 CSES_LOGIN_URL = CSES_BASE_URL + 'login/'
@@ -19,6 +19,7 @@ class webpage(webdriver.Chrome):
         with open("./secret/user-key") as fobj:
             self.username = fobj.readline().strip()
             self.password = fobj.readline().strip() 
+            self.preset_code_path = fobj.readline().strip() 
         
         # Fill in username
         username_box = self.find_element(by=By.ID, value='nick')
@@ -33,7 +34,8 @@ class webpage(webdriver.Chrome):
         # Click on submit button
         self.find_element(by='xpath', value="//input[@type='submit']").click()
 
-    # Doing absolutely nothing
+
+    # Doing absolutely nothing - redundant
     def do_nothing(self, cmd = None) -> None:
         pass
 
@@ -57,7 +59,7 @@ class webpage(webdriver.Chrome):
             print("\t Task Section: " + task_section_element.text)
             stdout.flush()
         except selenium.common.exceptions.NoSuchElementException:
-            print("No such task exists!")
+            print("\t No such task exists!")
             stdout.flush()
             self.back()
 
@@ -70,18 +72,33 @@ class webpage(webdriver.Chrome):
             file_element = self.find_element(by='xpath', value="//input[@name='file']")
             submit_element = self.find_element(by='xpath', value="//input[@value='Submit']")
 
+            cur_file_path = ""
+
             if cmd[2] == '-p':
-                file_element.send_keys(self.preset_code_path)
-            else :
-                file_element.send_keys(cmd[2])
-            submit_element.click()
+                cur_file_path= self.preset_code_path
+            else:
+                cur_file_path = cmd[2]
+
+            if isfile(cur_file_path):
+                file_element.send_keys(cur_file_path)
+                submit_element.click()
+
+                self.implicitly_wait(10)
+                verdict_elements = self.find_elements(by=By.CLASS_NAME, value='inline-score')
+                if len(verdict_elements) == 0:
+                    print("Uh oh, look slike something went wrong... probably a compiler error")
+                else:
+                    print("\t Verdict: " + verdict_elements[0].text)
+                    for test_case_num in range(1, len(verdict_elements)):
+                        print("\t\t Test Case " + str(test_case_num) + " : " + verdict_elements[test_case_num].text)
+            else:
+                print("\tNot a file!")
         except selenium.common.exceptions.NoSuchElementException:
-            print("No such task exists!")
-            stdout.flush()
+            print("\t No such task exists!")
             self.back()
         except selenium.common.exceptions.InvalidArgumentException as e:
-            print("File not found")
-            stdout.flush()
+            print("\t File not found")
+        stdout.flush()
 
 
     # initialzing the webpage object
