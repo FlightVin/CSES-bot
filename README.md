@@ -26,10 +26,10 @@ This can also be made into an alias in `~/.bashrc`
 
 `$ quit`
 
-### Opening a task's prompt - 
-
     - quits the browser
     - quits program
+
+### Opening a task's prompt - 
 
 `$ open <task number>`
 
