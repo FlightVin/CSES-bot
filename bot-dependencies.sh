@@ -1,10 +1,6 @@
 #!/bin/bash
 
-# include the following line if using pip3, comment out otherwise
-alias pip=pip3
-
-# include the following line if using python3, comment out otherwise
-alias python=python3
+# tested for python 3.9
 
 # installing selenium
 pip install selenium
